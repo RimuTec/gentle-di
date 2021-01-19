@@ -2,9 +2,9 @@ namespace CmdLine
 {
    public class PurchaseOrderController
    {
-      public PurchaseOrderController()
+      public PurchaseOrderController(IPurchaseOrderService service)
       {
-         _purchaseOrderService = new PurchaseOrderService();
+         _purchaseOrderService = service;
       }
 
       public void Post(/* parameters from HTTP request here */)
@@ -14,6 +14,6 @@ namespace CmdLine
 
       // Other members left out for brevity
 
-      private readonly PurchaseOrderService _purchaseOrderService;
+      private readonly IPurchaseOrderService _purchaseOrderService;
    }
 }

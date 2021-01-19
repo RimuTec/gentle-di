@@ -1,6 +1,6 @@
 namespace CmdLine
 {
-   public class PurchaseOrderRepository
+   public class PurchaseOrderRepository : IPurchaseOrderRepository
    {
       public void Save(PurchaseOrder order)
       {

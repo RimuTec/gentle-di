@@ -1,10 +1,10 @@
 namespace CmdLine
 {
-   public class PurchaseOrderService
+   public class PurchaseOrderService : IPurchaseOrderService
    {
-      public PurchaseOrderService()
+      public PurchaseOrderService(IPurchaseOrderRepository repository)
       {
-         _purchaseOrderRepository = new PurchaseOrderRepository();
+         _purchaseOrderRepository = repository;
       }
 
       public PurchaseOrder CreatePO()
@@ -14,6 +14,6 @@ namespace CmdLine
          return newOrder;
       }
 
-      private readonly PurchaseOrderRepository _purchaseOrderRepository;
+      private readonly IPurchaseOrderRepository _purchaseOrderRepository;
    }
 }
