@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Autofac;
 
 namespace CmdLine
 {
@@ -7,23 +6,24 @@ namespace CmdLine
    {
       private static void Main(string[] args)
       {
-         IServiceCollection services = new ServiceCollection();
-         IServiceProvider provider = ConfigureServices(services);
+         IContainer provider = ConfigureContainer();
          SimulatePostRequest(provider);
       }
 
-      public static void SimulatePostRequest(IServiceProvider provider)
+      public static void SimulatePostRequest(IContainer provider)
       {
-         var controller = provider.GetRequiredService<PurchaseOrderController>();
+         using var scope = provider.BeginLifetimeScope();
+         var controller = scope.Resolve<PurchaseOrderController>();
          controller.Post();
       }
 
-      public static IServiceProvider ConfigureServices(IServiceCollection serviceCollection)
+      public static IContainer ConfigureContainer()
       {
-         serviceCollection.AddScoped<IPurchaseOrderRepository, PurchaseOrderRepository>();
-         serviceCollection.AddScoped<IPurchaseOrderService, PurchaseOrderService>();
-         serviceCollection.AddScoped<PurchaseOrderController, PurchaseOrderController>();
-         return serviceCollection.BuildServiceProvider();
+         var builder = new ContainerBuilder();
+         builder.RegisterType<PurchaseOrderRepository>().As<IPurchaseOrderRepository>();
+         builder.RegisterType<PurchaseOrderService>().As<IPurchaseOrderService>();
+         builder.RegisterType<PurchaseOrderController>();
+         return builder.Build();
       }
    }
 }
