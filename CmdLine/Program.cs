@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CmdLine
 {
@@ -6,7 +7,23 @@ namespace CmdLine
    {
       private static void Main(string[] args)
       {
-         Console.WriteLine("Hello World!");
+         IServiceCollection services = new ServiceCollection();
+         IServiceProvider provider = ConfigureServices(services);
+         SimulatePostRequest(provider);
+      }
+
+      public static void SimulatePostRequest(IServiceProvider provider)
+      {
+         var controller = provider.GetRequiredService<PurchaseOrderController>();
+         controller.Post();
+      }
+
+      public static IServiceProvider ConfigureServices(IServiceCollection serviceCollection)
+      {
+         serviceCollection.AddScoped<IPurchaseOrderRepository, PurchaseOrderRepository>();
+         serviceCollection.AddScoped<IPurchaseOrderService, PurchaseOrderService>();
+         serviceCollection.AddScoped<PurchaseOrderController, PurchaseOrderController>();
+         return serviceCollection.BuildServiceProvider();
       }
    }
 }
